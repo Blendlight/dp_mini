@@ -1,0 +1,27 @@
+<?php  
+function node_menu()
+{
+    $menus['node'] = array(
+        'title'=>'All nodes',
+        'page callback'=>'nodes_page'
+    );
+
+    $menus['node/%'] = array(
+        'title'=>'All nodes',
+        'page callback'=>'node_page',
+        'page arguments' => [1]
+    );
+
+    return $menus;
+}
+
+function nodes_page()
+{
+    return 'Node page dude';
+}
+
+function node_page($nid)
+{
+    page_title("showing node $nid");
+    return 'hello node '.$nid.' page';
+}

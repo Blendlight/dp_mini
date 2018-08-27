@@ -1,0 +1,10 @@
+<?php
+
+function help_menu()
+{
+
+    $menu['help'] = array(
+        'title'
+    );
+
+}

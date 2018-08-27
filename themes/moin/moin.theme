@@ -1,0 +1,13 @@
+<?php
+
+function moin_info()
+{
+    return array(
+        "name"=>'Moin',
+        "description"=>'Moin theme for cms',
+        "regions" => [
+            'sidebar'=>'Left sidebar',
+            'sidebar2'=>'Right sidebar',
+        ]
+    );
+}

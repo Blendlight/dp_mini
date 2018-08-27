@@ -1,0 +1,34 @@
+<?php 
+
+function moin_menu()
+{
+    $menu['moin'] = array(
+        'title' => 'My title',
+        'page callback'=>'moin_page'
+    );
+
+    $menu['about'] = array(
+        'page callback' => 'about_page'
+    );
+    
+    return $menu;
+}
+
+function moin_page()
+{
+    page_title('Moin khan');
+    return 'My page';
+}
+
+function about_page()
+{
+    page_title('About us');
+    return theme('table', array(
+        'header'=>['NAME', 'Marks'],
+        'rows'=>array(
+            ['Moin', 300],
+            ['Maaz', 120],
+            ['Haseeb', 410]
+        )
+    ));
+}

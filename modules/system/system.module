@@ -1,0 +1,169 @@
+<?php
+
+function system_bootstrap()
+{
+    //build the menu system here
+    set_theme('moin');
+}
+
+function system_theme()
+{
+    
+    $theme['list'] = array(
+        'variables'=>array(
+            'title'=>'',
+            'items'=>[],
+        ),
+    );
+    
+    $theme['table'] = array(
+        'variables'=>array(
+            'header'=>['name', 'skill'],
+            'rows'=>array(
+                ['moin', 'drupal'],
+                ['moin', 'drupal'],
+                ['moin', 'drupal'],
+            ),
+            'caption'=>'Table caption',
+            'sticky'=>true,
+            )
+        );
+        
+        $theme['page'] = array(
+            'template' => array(
+                'path'=>BASE_PATH.'/modules/system/templates',
+                'name'=>'page.tpl.php'
+            ),
+        );
+        
+        $theme['html'] = array(
+            'template' => array(
+                'path'=>BASE_PATH.'/modules/system/templates',
+                'name'=>'html.tpl.php'
+            ),
+        );
+        
+        
+        $theme['404'] = array(
+            'template'=>array(
+                'path'=>BASE_PATH.'/modules/system/templates',
+                'name'=>'404.tpl.php'
+                )
+            );
+            
+            $theme['maaz'] = array(
+                'template' => array(
+                    'path'=>BASE_PATH.'/modules/system/templates',
+                    'name'=>'404.tpl.php'
+                ),
+            );
+            
+            return $theme;
+        }
+        
+        
+        function call_active_menu($active_menu)
+        {
+            
+            $menus = get_all_menus();
+            
+            $page_default = [
+                'type'=>'404',
+                'page callback'=>'p404_page',
+                'page arguments'=>[],
+                'title'=>'Default TILTE'
+            ];
+            if($active_menu === null){
+                $page = [
+                    'type'=>'404',
+                    'page callback'=>'p404_page'
+                ];
+            }else if(strpos($active_menu, "<") === 0)
+            {
+                //special type of menu
+                //the menu will be loaded from the database or modules idk
+                
+                if($active_menu == "<front>")
+                {
+                    $page = [
+                        'type'=>'special',
+                        'page callback'=>'front_page'
+                    ];
+                }else{
+                    $page = [
+                        'type'=>'special',
+                        'page callback'=>'special_page'
+                    ];
+                }
+                
+            }else
+            {
+                $menu = $menus[$active_menu];
+                $page = $menu;
+                $page['type'] = 'menu';
+                
+            }
+            
+            $page += $page_default;
+            
+            start_page_output($page);
+        }
+        
+        
+        function p404_page(){
+            page_title("Page not found");
+            
+            return theme('maaz');
+        }
+        
+        
+        function theme_list($variables)
+        {
+            ob_start();
+            if($variables['title'])
+            {
+                echo '<h2>'. $variables['title'] .'</h2>';
+            }
+            echo '<ul>';
+            foreach($variables['items'] as $item)
+            {
+                echo "<li>".$item."</li>";
+            }
+            echo '</ul>';
+            return ob_get_clean();
+            
+        }
+        
+        function theme_table($variables)
+        {
+            $header = $variables['header'];
+            $rows = $variables['rows'];
+            
+            
+            $header_output = "";
+            foreach($header as $td)
+            {
+                $header_output .= '<th>'. $td .'</th>';
+            }
+            
+            $rows_output = "";
+            foreach($rows as $row)
+            {
+                $rows_output .= "<tr>";
+                foreach($row as $td)
+                {
+                    $rows_output .= '<td>'. $td .'</td>';
+                }
+                $rows_output .= "</tr>";
+            }
+            
+            $output = '<table width="100%" border="1px">
+            <thead>
+            <tr>'. $header_output .'</tr>
+            </thead>
+            <tbody>
+            '. $rows_output .'
+            </table>';
+            return $output;
+        }
+        
